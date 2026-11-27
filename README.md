@@ -18,7 +18,9 @@ and the daily loss limit stops new entries even though the AI saw nothing unusua
 [TradingView webhook guide](https://www.delta.exchange/support/solutions/articles/80001141030-tutorial-trading-view-automation-on-delta-exchange)
 warns that when TradingView and Delta are out of sync, *"the first alert can open a larger or opposite position
 than you expect"*, and that *"TradingView signals may be delayed or missed."* AlgoGuard checks for exactly these
-before the order is sent.
+before the order is sent. At this leverage a wrong order meets market risk at once: on 10-11 October 2025, CoinGlass
+counted [$19.1B of leveraged crypto positions liquidated in one day](https://www.coingecko.com/learn/october-10-crypto-crash-explained),
+about 1.6 million traders.
 
 ```
 TradingView alert / API order
@@ -44,6 +46,11 @@ TradingView alert / API order
 
 The design rule: **the AI can make things stricter, never looser.** It can hold an order the rules allow; it
 can never send an order the rules block.
+
+**Why these models, not a large neural net or an LLM in the decision path:** every check sits on the live order
+path, so it must decide in milliseconds; each finding must come with a reason a trader can read and an auditor can
+re-run; and one bot has only tens to hundreds of orders to learn from. CUSUM, a block bootstrap and a per-bot
+Isolation Forest fit those limits. The LLM only rewrites the explanation, and is discarded if it invents a number.
 
 ## Run it
 
