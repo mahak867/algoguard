@@ -8,6 +8,11 @@ the explainer's own text. Prices, sizes and P&L are simulated; amounts are in th
 """
 from __future__ import annotations
 
+import sys as _sys
+from pathlib import Path as _Path
+
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))  # run from anywhere without PYTHONPATH
+
 import random
 import sys
 
