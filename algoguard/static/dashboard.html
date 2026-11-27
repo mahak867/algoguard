@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlgoGuard</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --card: #ffffff; --soft: #f1f2f4; --ink: #08152f; --muted: #5b6472; --line: #e3e6eb;
+    --orange: #f7930d; --pass: #1f9d63; --hold: #d9822b; --block: #d64545; --drift: #2f7fd1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0b1220; --card: #121b2e; --soft: #1a2439; --ink: #e8edf5; --muted: #9aa6b8; --line: #243049; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 20px;
+           background: #08152f; color: #fff; }
+  header h1 { font-size: 20px; margin: 0 12px 0 0; letter-spacing: -0.01em; }
+  header h1 span { color: var(--orange); }
+  .chip { font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 4px 10px; border-radius: 99px;
+          background: #1c2a48; color: #cfd8e6; }
+  .chip.live { background: var(--block); color: #fff; }
+  .spacer { flex: 1; }
+  button { font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+  .kill { background: #1c2a48; color: #fff; }
+  .kill.on { background: var(--block); }
+  input { font: inherit; padding: 7px 10px; border-radius: 8px; border: 1px solid #33415f; background: #0f1a30;
+          color: #fff; width: 220px; }
+  main { max-width: 1280px; margin: 0 auto; padding: 18px 20px 40px; display: grid; gap: 18px;
+         grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+  h2 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--orange); margin: 0 0 12px; }
+  .stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;
+           background: none; border: 0; padding: 0; }
+  .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+  .stat b { display: block; font-size: 28px; letter-spacing: -0.02em; }
+  .stat small { color: var(--muted); }
+  .pass { color: var(--pass); } .hold { color: var(--hold); } .block { color: var(--block); }
+  .hold-card { border: 2px solid var(--hold); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+  .hold-card .row { display: flex; gap: 8px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+  .ok { background: var(--pass); color: #fff; } .no { background: var(--block); color: #fff; }
+  .timer { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .empty { color: var(--muted); }
+  .bot { border-top: 1px solid var(--line); padding: 12px 0; }
+  .bot:first-of-type { border-top: 0; padding-top: 0; }
+  .bot-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .bot-head b { font-size: 16px; }
+  .meter { height: 8px; background: var(--soft); border-radius: 99px; overflow: hidden; margin: 6px 0 2px; }
+  .meter i { display: block; height: 100%; background: var(--pass); }
+  .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 4px 14px; font-size: 13px;
+        color: var(--muted); margin-top: 8px; }
+  .kv span b { color: var(--ink); font-weight: 600; }
+  svg.spark { width: 100%; height: 56px; display: block; margin-top: 8px; }
+  .feed { max-height: 70vh; overflow: auto; }
+  .d { display: grid; grid-template-columns: 64px 1fr auto; gap: 4px 12px; padding: 10px 0;
+       border-top: 1px solid var(--line); }
+  .d:first-child { border-top: 0; }
+  .pill { font-size: 11px; font-weight: 800; letter-spacing: .05em; border-radius: 6px; padding: 3px 0; text-align: center;
+          color: #fff; height: fit-content; }
+  .pill.PASS { background: var(--pass); } .pill.HOLD { background: var(--hold); } .pill.BLOCK { background: var(--block); }
+  .d .what { font-weight: 600; } .d .why { grid-column: 2 / 4; color: var(--muted); font-size: 13.5px; }
+  .d .meta { color: var(--muted); font-size: 12px; text-align: right; white-space: nowrap; }
+  .err { grid-column: 1 / -1; background: #fdecec; color: #8a1f1f; border-radius: 10px; padding: 10px 14px; display: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Algo<span>Guard</span></h1>
+  <span id="mode" class="chip">…</span>
+  <span class="spacer"></span>
+  <input id="token" type="password" placeholder="Admin token" autocomplete="off" aria-label="Admin token">
+  <button id="kill" class="kill" type="button">Kill switch: off</button>
+</header>
+<main>
+  <div id="err" class="err"></div>
+  <div class="stats">
+    <div class="stat"><b id="n-pass" class="pass">0</b><small>passed</small></div>
+    <div class="stat"><b id="n-hold" class="hold">0</b><small>held for you</small></div>
+    <div class="stat"><b id="n-block" class="block">0</b><small>blocked</small></div>
+    <div class="stat"><b id="lat">–</b><small>median added time per order</small></div>
+  </div>
+  <div style="display:grid; gap:18px; align-content:start">
+    <section><h2>Waiting for you</h2><div id="holds" class="empty">No orders are waiting.</div></section>
+    <section><h2>Bots</h2><div id="bots" class="empty">No bots yet.</div></section>
+  </div>
+  <section style="align-self:start"><h2>Every decision, with its reason</h2><div id="feed" class="feed empty">Nothing yet.</div></section>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const store = { get() { try { return sessionStorage.getItem("ag_token") || ""; } catch { return ""; } },
+                set(v) { try { sessionStorage.setItem("ag_token", v); } catch {} } };
+$("token").value = store.get();
+$("token").addEventListener("change", (e) => { store.set(e.target.value.trim()); refresh(); });
+
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hhmm = (t) => t ? new Date(t * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "";
+
+async function api(path, opts = {}) {
+  const r = await fetch(path, { ...opts, headers: { "Content-Type": "application/json",
+                                                     Authorization: "Bearer " + store.get(), ...(opts.headers || {}) } });
+  if (!r.ok) throw new Error(r.status === 401 ? "Enter the admin token (top right) to see your bots." : `${path}: ${r.status}`);
+  return r.json();
+}
+
+function spark(points) {
+  if (!points.length) return "";
+  const w = 300, h = 56, n = points.length;
+  const x = (i) => n === 1 ? w : (i / (n - 1)) * w, y = (v) => h - 4 - (v / 100) * (h - 8);
+  const d = points.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Drift score over time">
+    <line x1="0" x2="${w}" y1="${y(60)}" y2="${y(60)}" stroke="var(--hold)" stroke-dasharray="4 4" stroke-width="1"/>
+    <line x1="0" x2="${w}" y1="${y(80)}" y2="${y(80)}" stroke="var(--block)" stroke-dasharray="4 4" stroke-width="1"/>
+    <path d="${d}" fill="none" stroke="var(--drift)" stroke-width="2.2" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+function renderBots(data) {
+  $("mode").textContent = data.dry_run ? "DRY RUN: no orders sent" : "LIVE: orders go to Delta";
+  $("mode").className = "chip" + (data.dry_run ? "" : " live");
+  $("kill").textContent = "Kill switch: " + (data.kill_switch ? "ON" : "off");
+  $("kill").className = "kill" + (data.kill_switch ? " on" : "");
+  $("kill").dataset.on = data.kill_switch ? "1" : "";
+  if (!data.bots.length) { $("bots").className = "empty"; $("bots").textContent = "No bots yet."; return; }
+  $("bots").className = "";
+  $("bots").innerHTML = data.bots.map((b) => {
+    const lim = b.limits.max_daily_loss, loss = Math.max(0, -b.pnl_today);
+    const pct = lim ? Math.min(100, (loss / lim) * 100) : 0;
+    const dr = b.drift;
+    const level = dr ? dr.level : "no backtest";
+    const cls = level === "act" ? "block" : level === "warn" ? "hold" : "pass";
+    return `<div class="bot">
+      <div class="bot-head"><b>${esc(b.bot_id)}</b>
+        <span class="${cls}">Drift ${dr ? dr.score + "/100 · " + esc(level) + (dr.cause ? " · " + esc(dr.cause) : "") : "– (upload a backtest)"}</span></div>
+      <div class="meter" title="Today's loss vs the daily limit"><i style="width:${pct}%;background:${pct >= 100 ? "var(--block)" : pct > 70 ? "var(--hold)" : "var(--pass)"}"></i></div>
+      <small class="empty">Today's P&amp;L ${b.pnl_today} · daily loss limit ${lim}</small>
+      ${spark(b.drift_history)}
+      <div class="kv">
+        <span>Max leverage <b>${b.limits.max_leverage}x</b></span>
+        <span>Min distance to liquidation <b>${b.limits.min_liq_distance_pct}%</b></span>
+        <span>On drift <b>${esc(b.drift_action)}</b></span>
+        <span>Orders learned <b>${b.orders_learned}</b>${b.model_ready ? "" : " (learning)"}</span>
+        <span>Your answers <b>${b.confirmed} ✓ / ${b.rejected} ✗</b></span>
+        <span>Hold threshold <b>${b.hold_threshold == null ? "default" : b.hold_threshold.toFixed(3)}</b></span>
+      </div></div>`;
+  }).join("");
+}
+
+function renderHolds(holds) {
+  if (!holds.length) { $("holds").className = "empty"; $("holds").textContent = "No orders are waiting."; return; }
+  $("holds").className = "";
+  $("holds").innerHTML = holds.map((h) => `<div class="hold-card">
+      <div class="what"><b>${esc(h.order.bot_id)}</b>: ${esc(h.order.side)} ${h.order.size} ${esc(h.order.symbol)}</div>
+      <div class="empty">${esc(h.explanation)}</div>
+      <div class="row"><button class="ok" data-id="${esc(h.hold_id)}" data-tok="${esc(h.confirm_token)}" data-a="1">Confirm</button>
+        <button class="no" data-id="${esc(h.hold_id)}" data-tok="${esc(h.confirm_token)}" data-a="">Reject</button>
+        <span class="timer" data-exp="${h.expires_at}"></span></div></div>`).join("");
+  tick();
+}
+
+function renderFeed(rows) {
+  const c = { PASS: 0, HOLD: 0, BLOCK: 0 };
+  rows.forEach((d) => c[d.outcome]++);
+  $("n-pass").textContent = c.PASS; $("n-hold").textContent = c.HOLD; $("n-block").textContent = c.BLOCK;
+  const lat = rows.map((d) => d.latency_ms).filter((x) => x > 0).sort((a, b) => a - b);
+  $("lat").textContent = lat.length ? lat[Math.floor(lat.length / 2)].toFixed(1) + " ms" : "–";
+  if (!rows.length) { $("feed").className = "feed empty"; $("feed").textContent = "Nothing yet."; return; }
+  $("feed").className = "feed";
+  $("feed").innerHTML = rows.map((d, i) => ({ ...d, i })).sort((a, b) => (b.time || 0) - (a.time || 0) || b.i - a.i).map((d) => `<div class="d">
+      <span class="pill ${d.outcome}">${d.outcome}</span>
+      <span class="what">${esc(d.order.bot_id)} · ${esc(d.order.side)} ${d.order.size} ${esc(d.order.symbol)}</span>
+      <span class="meta">${hhmm(d.time)}${d.latency_ms ? " · " + d.latency_ms.toFixed(1) + " ms" : ""}</span>
+      <span class="why">${esc(d.explanation)}</span></div>`).join("");
+}
+
+function tick() {
+  const now = Date.now() / 1000;
+  document.querySelectorAll(".timer").forEach((el) => {
+    const left = Math.max(0, Math.round(el.dataset.exp - now));
+    el.textContent = left ? `${left} s left` : "expired";
+  });
+}
+
+$("holds").addEventListener("click", async (e) => {
+  const b = e.target.closest("button[data-id]");
+  if (!b) return;
+  b.disabled = true;
+  try {
+    await api(`/holds/${encodeURIComponent(b.dataset.id)}/confirm`, { method: "POST",
+      body: JSON.stringify({ token: b.dataset.tok, approve: !!b.dataset.a }) });
+  } catch (err) { showErr(err); }
+  refresh();
+});
+
+$("kill").addEventListener("click", async () => {
+  const on = !$("kill").dataset.on;
+  if (on && !confirm("Turn the kill switch ON? Every new order will be blocked until you turn it off.")) return;
+  try { await api("/kill-switch", { method: "POST", body: JSON.stringify({ on }) }); } catch (err) { showErr(err); }
+  refresh();
+});
+
+function showErr(err) { $("err").textContent = err.message; $("err").style.display = err ? "block" : "none"; }
+
+async function refresh() {
+  try {
+    const [bots, holds, feed] = await Promise.all([api("/bots"), api("/holds"), api("/decisions?limit=100")]);
+    $("err").style.display = "none";
+    renderBots(bots); renderHolds(holds); renderFeed(feed);
+  } catch (err) { showErr(err); }
+}
+refresh();
+setInterval(refresh, 2500);
+setInterval(tick, 1000);
+</script>
+</body>
+</html>

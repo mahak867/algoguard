@@ -17,7 +17,8 @@ class Settings(BaseSettings):
     DELTA_API_SECRET: str | None = None
 
     TELEGRAM_BOT_TOKEN: str | None = None
-    TELEGRAM_CHAT_ID: str | None = None
+    TELEGRAM_CHAT_ID: str | None = None        # only taps from this chat can confirm or reject a HOLD
+    TELEGRAM_WEBHOOK_SECRET: str | None = None # Telegram sends it back in a header on every update; required
 
     ANTHROPIC_API_KEY: str | None = None       # optional: friendlier explanations, checked against the facts
     EXPLAINER_MODEL: str = "claude-haiku-5-5"

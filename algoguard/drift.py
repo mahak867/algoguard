@@ -108,7 +108,9 @@ class DriftDetector:
         if t.slippage_bps is not None:
             zs = (t.slippage_bps - c.expected_slippage_bps) / c.slippage_sd_bps
             s.s_slip = max(0.0, s.s_slip + zs - c.k)
-        return self.report()
+        rep = self.report()
+        s.history.append(rep["score"])  # one point per live trade; report() alone does not change state
+        return rep
 
     def _cusum_score(self, stat: float) -> float:
         c = self.cfg
@@ -135,7 +137,6 @@ class DriftDetector:
             if n >= 10 else 0.0,
         }
         score = int(round(max(signals.values())))
-        s.history.append(score)
 
         vols = [t.market_vol for t in s.trades[-10:] if t.market_vol is not None]
         vol_ratio = float(np.mean(vols) / b.market_vol) if vols and b.market_vol else None
