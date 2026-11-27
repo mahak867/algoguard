@@ -23,7 +23,7 @@ TradingView alert / API order
 | Part | File | How |
 |---|---|---|
 | Hard-rule veto | `algoguard/rules.py` | Daily loss, leverage, distance to liquidation, position cap, price and order-value typo guards, kill switch. Plain code; no model output feeds it. Names the limit that binds. |
-| Alert anomaly checker | `algoguard/anomaly.py` | Exact checks (duplicate, stale alert, price far from mark, bursts), context checks against the real position (unexpected short or flip), and a per-bot Isolation Forest trained on the bot's own orders. Can only HOLD (duplicates BLOCK). |
+| Alert anomaly checker | `algoguard/anomaly.py` | Exact checks (duplicate, stale alert, price far from mark, bursts), context checks against the real position (unexpected short or flip), and a per-bot Isolation Forest trained on the bot's own orders. Each bot's threshold learns from the trader's answers to HOLDs: a confirmed false alarm makes it a little less jumpy, a rejected order makes it stricter, within fixed bounds. Can only HOLD (duplicates BLOCK). |
 | Drift detector | `algoguard/drift.py` | One-sided CUSUM tests on trade return, win rate and slippage against the trader's backtest, plus a block bootstrap of the backtest trades. Says whether the market changed, fills got worse or the edge faded, and applies the action the trader chose (alert, halve size, pause). |
 | Explainer | `algoguard/explain.py` | A template reason for every decision; optionally an LLM rewrite that is discarded unless every number in it appears in the facts. |
 | Guard pipeline | `algoguard/pipeline.py` | Runs the above in order of authority. If a model fails, decides on the rules alone. A confirmed HOLD is re-checked against the rules before it is sent. |
@@ -83,10 +83,15 @@ These show the prototype works as designed on faults we chose. They are not resu
 
 ## Not verified yet
 
-- **Delta API.** `algoguard/delta.py` was written from Delta's public docs and is tested only against mocks.
-  Run `scripts/check_delta.py` on the testnet and fix any endpoint or field that differs.
+- **Delta API, logged-in endpoints.** The public endpoints (product, ticker) are verified against Delta
+  Exchange India's live API and testnet (`tests/test_delta_live_shape.py`, with a recorded response; run
+  `ALGOGUARD_LIVE=1 pytest tests/test_delta_live_shape.py` to hit the live API). Positions, wallet and order
+  placement need API keys and are still tested only against mocks: run `scripts/check_delta.py` on the testnet.
 - **Liquidation estimate.** `algoguard/liquidation.py` uses the standard isolated-margin formula for a new
-  position; use Delta's reported liquidation price for open positions and check the maintenance margin.
+  position, with the maintenance margin read from Delta's product data (0.25% for BTCUSD in Nov 2026). Delta's
+  own reported liquidation price should be used for open positions.
+- **Overlap with Delta.** Delta already rejects limit prices outside its price band (5% for BTCUSD), so
+  AlgoGuard's price-gap check is a second line; its value is in size, position, leverage and drift checks.
 - **TradingView CSV headers** change over time; check `parse_tradingview_csv` against a real export.
 - **Telegram** sending is ported from IntelliStock, which tested it only against a mock.
 - State is in memory: restarting the server forgets bots, history and holds. A database comes next.

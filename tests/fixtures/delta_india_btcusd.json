@@ -1,0 +1,35 @@
+{
+  "note": "Trimmed from Delta Exchange India public API (api.india.delta.exchange), BTCUSD, captured 27 Nov 2026",
+  "product": {
+    "success": true,
+    "result": {
+      "id": 27,
+      "symbol": "BTCUSD",
+      "contract_type": "perpetual_futures",
+      "contract_value": "0.001",
+      "initial_margin": "0.5",
+      "maintenance_margin": "0.25",
+      "default_leverage": "200.000000000000000000",
+      "position_size_limit": 125000,
+      "price_band": "5",
+      "settling_asset": {
+        "symbol": "USD"
+      }
+    }
+  },
+  "ticker": {
+    "success": true,
+    "result": {
+      "symbol": "BTCUSD",
+      "product_id": 27,
+      "mark_price": "61541.80136969",
+      "close": 61541.0,
+      "contract_value": "0.001000000000000000",
+      "price_band": {
+        "lower_limit": "58465.39853567",
+        "upper_limit": "64619.65101311"
+      },
+      "timestamp": 1795783650928129
+    }
+  }
+}

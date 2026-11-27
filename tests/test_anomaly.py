@@ -1,3 +1,4 @@
+import pytest
 import random
 
 from algoguard.anomaly import AnomalyChecker, AnomalyConfig
@@ -78,3 +79,17 @@ def test_model_flags_out_of_character_order():
     ch, t = trained()
     fs, score = ch.check(sig("buy", 30, t + 5, leverage=20), acct(size=0))
     assert score is not None and score >= 0.9
+
+
+def test_trader_answers_tune_the_bot_threshold():
+    ch, _ = trained()
+    start = ch.cfg.hold_score
+    for _ in range(4):
+        ch.feedback("b1", {"model_unusual"}, approved=True)   # false alarms: be less jumpy for this bot
+    assert ch.profile("b1").hold_score == pytest.approx(start + 0.02)
+    for _ in range(100):
+        ch.feedback("b1", {"model_unusual"}, approved=False)  # real catches: be stricter, but bounded
+    assert ch.profile("b1").hold_score == ch.cfg.hold_score_min
+    before = ch.profile("b1").hold_score
+    ch.feedback("b1", {"stale_alert"}, approved=True)          # answers to exact checks do not move the model
+    assert ch.profile("b1").hold_score == before

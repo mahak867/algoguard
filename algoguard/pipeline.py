@@ -137,6 +137,7 @@ class Guard:
             raise KeyError("no such hold (already answered or expired)")
         self.confirm.check(hold_id, h.decision.signal, token, now)
         sig = h.decision.signal
+        self.anomaly.feedback(sig.bot_id, {f.code for f in h.decision.findings}, approve)
         if not approve:
             d = Decision(Outcome.BLOCK, sig, [Finding("rejected_by_trader", "system", "block",
                                                       "You rejected this order.", {})], h.decision.anomaly_score)

@@ -87,8 +87,9 @@ class DeltaClient:
         prod = self.product(symbol)
         asset = (prod.get("settling_asset") or {}).get("symbol", "USD")
         equity, avail = self.balance(asset)
+        mm = prod.get("maintenance_margin")
         return Account(equity, avail, self.mark_price(symbol), float(prod.get("contract_value") or 1.0),
-                       self.position(symbol), realised_pnl_today)
+                       self.position(symbol), realised_pnl_today, float(mm) if mm is not None else None)
 
     # ── orders ──
     def place_order(self, s: Signal) -> dict:

@@ -33,7 +33,10 @@ class AnomalyConfig:
     burst_limit: int = 5
     size_ratio_hold: float = 3.0         # more than 3x the bot's largest past order
     min_history_for_model: int = 30
-    hold_score: float = 0.97             # more unusual than 97% of the bot's own history
+    hold_score: float = 0.97             # starting point: more unusual than 97% of the bot's own history
+    hold_score_min: float = 0.90         # the trader's answers move each bot's threshold within these bounds
+    hold_score_max: float = 0.995
+    feedback_step: float = 0.005
     refit_every: int = 20
 
 
@@ -52,6 +55,9 @@ class BotProfile:
     history: list[_Past] = field(default_factory=list)
     seen: deque = field(default_factory=lambda: deque(maxlen=500))  # (t, key) of every alert received
     model: IsolationForest | None = None
+    hold_score: float | None = None      # this bot's own threshold, tuned by the trader's answers to HOLDs
+    confirmed: int = 0
+    rejected: int = 0
     train_scores: np.ndarray | None = None
     fitted_on: int = 0
 
@@ -152,13 +158,28 @@ class AnomalyChecker:
             x = np.array([p.features(now, side, sig.size, sig.leverage or acct.position.leverage, prev_alert)])
             s = p.model.score_samples(x)[0]
             score = float(np.mean(p.train_scores > s))  # share of the bot's own history that looks more normal
-            if score >= c.hold_score:
+            if score >= (p.hold_score if p.hold_score is not None else c.hold_score):
                 add("model_unusual", "hold", f"This order looks unlike {score:.0%} of this bot's past orders "
                     "(size, side, time of day, spacing, leverage).", unusual_pct=round(score * 100))
         else:
             out.append(Finding("cold_start", "anomaly", "info", f"Only {len(hist)} past orders; the learned check "
                                f"starts at {c.min_history_for_model}.", {"history": len(hist)}))
         return out, score
+
+    def feedback(self, bot_id: str, findings_codes: set[str], approved: bool) -> float:
+        """The trader answered a HOLD. Confirming a model-flagged order means it was a false alarm for this bot,
+        so the bot's threshold rises a little; rejecting one means the model was right, so it falls. Bounded both
+        ways, and it only affects the learned check, never the exact checks or the hard rules."""
+        c, p = self.cfg, self.profile(bot_id)
+        cur = p.hold_score if p.hold_score is not None else c.hold_score
+        if "model_unusual" in findings_codes:
+            cur += c.feedback_step if approved else -c.feedback_step
+        p.hold_score = min(max(cur, c.hold_score_min), c.hold_score_max)
+        if approved:
+            p.confirmed += 1
+        else:
+            p.rejected += 1
+        return p.hold_score
 
     def refit_if_due(self, bot_id: str) -> bool:
         """Retrain a bot's model once enough new orders have arrived. Call it after the order is sent, not before."""

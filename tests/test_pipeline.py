@@ -76,3 +76,10 @@ def test_drift_halves_opening_orders():
         g.record_trade("b1", LiveTrade(float(r), 5.0, 4.0))
     d = g.process(sig(size=10), acct())
     assert d.signal.size == 5 and "drift_halve" in {f.code for f in d.findings}
+
+
+def test_hold_answer_feeds_back_to_the_model():
+    g = guard()
+    d = g.process(sig(t=T0, sent_at=T0 - 600), acct())
+    g.resolve_hold(d.hold_id, g.held[d.hold_id].token, False, now=T0 + 5)
+    assert g.anomaly.profile("b1").rejected == 1

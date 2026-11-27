@@ -58,6 +58,7 @@ class Account:
     contract_value: float            # underlying per contract, e.g. 0.001 BTC
     position: Position
     realised_pnl_today: float = 0.0  # since the start of the trader's day; negative is a loss
+    maintenance_margin_pct: float | None = None  # from Delta's product data (BTCUSD: 0.25 in Nov 2026)
 
 
 @dataclass

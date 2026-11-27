@@ -27,7 +27,7 @@ class Limits:
     max_position_contracts: int = 1000       # absolute size of the position after the fill
     max_order_notional: float | None = None  # typo guard, not a risk limit; None = 50% of equity
     max_price_gap_pct: float = 20.0          # a limit price this far from mark is almost always a typo
-    maintenance_margin_pct: float = 0.5      # used only when the exchange gives no liquidation price
+    maintenance_margin_pct: float = 0.25     # fallback; Delta's product data is used when available
     blocked_symbols: list[str] = field(default_factory=list)
     paused: bool = False                     # the kill switch
 
@@ -111,7 +111,8 @@ def check(sig: Signal, acct: Account, limits: Limits, kill_switch: bool = False)
         entry_after = (abs(pos.size) * pos.entry_price + sig.size * ref) / abs(new)
     else:
         entry_after = ref
-    liq = liquidation_price("long" if new > 0 else "short", entry_after, lev_after, limits.maintenance_margin_pct)
+    mm = acct.maintenance_margin_pct if acct.maintenance_margin_pct is not None else limits.maintenance_margin_pct
+    liq = liquidation_price("long" if new > 0 else "short", entry_after, lev_after, mm)
     dist = abs(acct.mark_price - liq) / acct.mark_price * 100 if acct.mark_price else 0.0
     if dist < limits.min_liq_distance_pct:
         block("liquidation_distance", f"After the fill, liquidation would be about {liq:,.0f}, only {dist:.1f}% from "
