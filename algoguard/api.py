@@ -34,16 +34,45 @@ from algoguard.rules import Limits
 
 
 class AlertIn(BaseModel):
-    """What to put in the TradingView alert message (see README)."""
+    """The TradingView alert message.
+
+    Accepts Delta's own Trading Bot JSON unchanged ({"symbol": "{{ticker}}", "side": ..., "qty": ...,
+    "strategy_id": ...}, where {{ticker}} is e.g. BTCUSD.P on a DELTAIN: chart), so a trader keeps the message
+    Delta generated and only swaps the webhook URL for AlgoGuard's (the bot key goes in the URL as ?key=).
+    Also accepts AlgoGuard's own fields: size, price, time, reduce_only, leverage, secret.
+    """
+    model_config = {"extra": "allow"}
     secret: str | None = None
     symbol: str
     side: str
-    size: int = Field(gt=0)
+    size: int | None = Field(default=None, gt=0)
+    qty: int | str | None = None         # Delta's field; a string such as "20" in Delta's template
     order_type: str = "market"
     price: float | None = None
     time: float | str | None = None      # {{timenow}} (ISO) or epoch seconds
     reduce_only: bool = False
     leverage: float | None = None
+    strategy_id: str | None = None
+
+    def contracts(self) -> int:
+        n = self.size if self.size is not None else self.qty
+        try:
+            v = float(n)
+        except (TypeError, ValueError):
+            raise ValueError("the alert needs a whole number of contracts in qty (or size)") from None
+        if v <= 0 or v != int(v):
+            raise ValueError("qty must be a whole number of lots greater than 0 (Delta rejects decimals)")
+        return int(v)
+
+    def delta_symbol(self) -> str:
+        """{{ticker}} on a DELTAIN: chart is e.g. BTCUSD.P; Delta's API product symbol is BTCUSD."""
+        sym = self.symbol.strip().upper()
+        if ":" in sym:
+            sym = sym.split(":", 1)[1]
+        return sym[:-2] if sym.endswith(".P") else sym
+
+    def kind(self) -> str:
+        return {"market_order": "market", "limit_order": "limit"}.get(self.order_type, self.order_type)
 
 
 class BotIn(BaseModel):
@@ -111,7 +140,7 @@ def create_app(cfg: Settings | None = None, account_source=None, guard: Guard | 
 
     def handle(bot: Bot, a: AlertIn, source: str) -> dict:
         try:
-            sig = Signal(bot.bot_id, a.symbol, a.side, a.size, a.order_type, a.price, _epoch(a.time),
+            sig = Signal(bot.bot_id, a.delta_symbol(), a.side, a.contracts(), a.kind(), a.price, _epoch(a.time),
                          time.time(), a.reduce_only, a.leverage, source, a.model_dump(exclude={"secret"}))
         except ValueError as e:
             raise HTTPException(422, str(e)) from None
@@ -144,10 +173,11 @@ def create_app(cfg: Settings | None = None, account_source=None, guard: Guard | 
         return {"ok": True, "dry_run": cfg.DRY_RUN, "bots": len(g.bots), "kill_switch": g.kill_switch}
 
     @app.post("/webhook/{bot_id}")
-    def webhook(bot_id: str, a: AlertIn, bg: BackgroundTasks):
+    def webhook(bot_id: str, a: AlertIn, bg: BackgroundTasks, key: str | None = None):
         bot = bot_or_404(bot_id)
         bg.add_task(g.maintain, bot_id)
-        if not a.secret or not hmac.compare_digest(a.secret, bot.secret):
+        given = a.secret or key or ""
+        if not given or not hmac.compare_digest(given, bot.secret):
             raise HTTPException(401, "wrong or missing secret")
         return handle(bot, a, "tradingview")
 

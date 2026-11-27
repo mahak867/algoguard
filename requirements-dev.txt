@@ -1,0 +1,1 @@
+pillow==11.0.0  # only for scripts/make_demo_gif.py

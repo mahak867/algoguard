@@ -65,3 +65,14 @@ def test_backtest_and_drift_endpoints():
     r = c.post("/bots/trend/trades", json={"return_pct": -3.0, "pnl": -60}, headers=ADMIN).json()
     assert "score" in r
     assert c.get("/bots/trend/drift", headers=ADMIN).json()["trades"] == 1
+
+
+def test_accepts_deltas_own_webhook_json_unchanged():
+    """Delta's Trading Bot generates this message; AlgoGuard takes it as is, keyed by the URL."""
+    c, _ = client()
+    secret = setup_bot(c)
+    delta_msg = {"symbol": "BTCUSD.P", "side": "buy", "qty": "20", "strategy_id": "abc123"}
+    r = c.post(f"/webhook/trend?key={secret}", json=delta_msg).json()
+    assert r["outcome"] == "PASS" and r["order"]["symbol"] == "BTCUSD" and r["order"]["size"] == 20
+    assert c.post(f"/webhook/trend?key={secret}", json={**delta_msg, "qty": "0.5"}).status_code == 422
+    assert c.post("/webhook/trend?key=wrong", json=delta_msg).status_code == 401

@@ -7,6 +7,19 @@ Challenge.
 AI models check every order and keep watching a bot after it goes live; the trader's own hard limits always
 have the final say.
 
+![AlgoGuard demo: a week with a BTC futures bot](docs/demo.gif)
+
+*The week from our Round 1 deck, run through the real code (`python scripts/demo_week.py`; simulated prices and
+P&L). A duplicate alert is blocked, a 10x size slip is held and rejected, a regime shift halves the bot's size,
+and the daily loss limit stops new entries even though the AI saw nothing unusual.*
+
+**Why this matters on Delta:** the BTC perpetual on Delta Exchange India defaults to **200x leverage** with a
+**0.25% maintenance margin** (Delta's public product API, Nov 2026), and Delta's own
+[TradingView webhook guide](https://www.delta.exchange/support/solutions/articles/80001141030-tutorial-trading-view-automation-on-delta-exchange)
+warns that when TradingView and Delta are out of sync, *"the first alert can open a larger or opposite position
+than you expect"*, and that *"TradingView signals may be delayed or missed."* AlgoGuard checks for exactly these
+before the order is sent.
+
 ```
 TradingView alert / API order
         │
@@ -45,7 +58,7 @@ uvicorn algoguard.api:app --reload
 
 `ALGOGUARD_DRY_RUN=true` (the default) decides and logs but never sends an order.
 
-### Register a bot and point TradingView at it
+### Register a bot and point your Delta Trading Bot alert at it
 
 ```bash
 curl -X POST localhost:8000/bots -H "Authorization: Bearer $ALGOGUARD_ADMIN_TOKEN" \
@@ -53,13 +66,14 @@ curl -X POST localhost:8000/bots -H "Authorization: Bearer $ALGOGUARD_ADMIN_TOKE
   -d '{"bot_id": "btc-trend", "limits": {"max_daily_loss": 100, "max_leverage": 5, "min_liq_distance_pct": 15}}'
 ```
 
-The answer includes the bot's `secret`. In TradingView, set the alert's webhook URL to
-`https://<your-server>/webhook/btc-trend` and the message to:
+The answer includes the bot's `secret`. **Drop-in with Delta's Trading Bot:** keep the alert *Message* JSON that
+Delta's Trading Bot generated for you, unchanged (`{"symbol": "{{ticker}}", "side": "{{strategy.order.action}}",
+"qty": "{{strategy.order.contracts}}", "strategy_id": ...}`), and only replace the *Notifications → Webhook URL*
+with `https://<your-server>/webhook/btc-trend?key=<secret>`. AlgoGuard maps `BTCUSD.P` to Delta's `BTCUSD`,
+rejects decimal lot sizes the way Delta does, and forwards orders that pass.
 
-```json
-{"secret": "<secret>", "symbol": "BTCUSD", "side": "{{strategy.order.action}}",
- "size": {{strategy.order.contracts}}, "order_type": "market", "price": {{close}}, "time": "{{timenow}}"}
-```
+Optionally add `"price": {{close}}, "time": "{{timenow}}"` to the message so AlgoGuard can also catch stale alerts
+and prices that moved.
 
 Upload the backtest so drift has a baseline (`returns` as a list of % per trade, or `csv` with the
 Strategy Tester export):
