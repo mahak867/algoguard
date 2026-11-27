@@ -83,3 +83,18 @@ def test_hold_answer_feeds_back_to_the_model():
     d = g.process(sig(t=T0, sent_at=T0 - 600), acct())
     g.resolve_hold(d.hold_id, g.held[d.hold_id].token, False, now=T0 + 5)
     assert g.anomaly.profile("b1").rejected == 1
+
+
+def test_unanswered_holds_expire_and_are_logged_as_never_sent():
+    from algoguard.models import Outcome
+    from algoguard.pipeline import Bot, Guard
+    from algoguard.rules import Limits
+    from tests.helpers import T0, acct, sig
+    g = Guard("k", hold_seconds=120)
+    g.add_bot(Bot("b1", "s", Limits()))
+    d = g.process(sig(t=T0, sent_at=T0 - 600), acct(), now=T0)  # a stale alert: held
+    assert d.outcome is Outcome.HOLD and d.hold_id in g.held
+    assert g.expire_holds(now=T0 + 60) == []
+    gone = g.expire_holds(now=T0 + 121)
+    assert [x.hold_id for x in gone] == [d.hold_id] and d.hold_id not in g.held
+    assert gone[0].outcome is Outcome.BLOCK and "never sent" in gone[0].explanation

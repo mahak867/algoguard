@@ -76,3 +76,64 @@ def test_accepts_deltas_own_webhook_json_unchanged():
     assert r["outcome"] == "PASS" and r["order"]["symbol"] == "BTCUSD" and r["order"]["size"] == 20
     assert c.post(f"/webhook/trend?key={secret}", json={**delta_msg, "qty": "0.5"}).status_code == 422
     assert c.post("/webhook/trend?key=wrong", json=delta_msg).status_code == 401
+
+
+def tg_client():
+    cfg = Settings(SECRET_KEY="k", ADMIN_TOKEN="adm", DRY_RUN=True, TELEGRAM_CHAT_ID="42", TELEGRAM_WEBHOOK_SECRET="s3")
+    sender = NullSender()
+    app = create_app(cfg, account_source=lambda symbol, bot: acct(pnl=bot.realised_pnl_today), sender=sender)
+    return TestClient(app), sender
+
+
+def held_alert(c, secret, size=11):
+    alert = {"secret": secret, "symbol": "BTCUSD", "side": "buy", "size": size, "price": 60000, "time": "2020-01-01T00:00:00Z"}
+    r = c.post("/webhook/trend", json=alert).json()
+    assert r["outcome"] == "HOLD"
+    return r["hold_id"]
+
+
+def tap(c, data, chat=42, secret="s3"):
+    upd = {"update_id": 1, "callback_query": {"id": "cb1", "data": data,
+                                              "message": {"message_id": 7, "chat": {"id": chat}, "text": "HOLD"}}}
+    return c.post("/telegram/webhook", json=upd, headers={"X-Telegram-Bot-Api-Secret-Token": secret})
+
+
+def test_hold_message_has_confirm_and_reject_buttons():
+    c, sender = tg_client()
+    hid = held_alert(c, setup_bot(c))
+    assert [b["callback_data"] for b in sender.buttons[-1]] == [f"c:{hid}", f"r:{hid}"]
+
+
+def test_telegram_confirm_sends_and_reject_blocks():
+    c, sender = tg_client()
+    secret = setup_bot(c)
+    hid = held_alert(c, secret)
+    r = tap(c, f"c:{hid}").json()
+    assert r["handled"] and r["outcome"] == "PASS" and r["sent"] == {"dry_run": True}
+    assert "Confirmed" in sender.edits[-1]
+    assert tap(c, f"c:{hid}").json()["handled"] is False  # a second tap cannot send it again
+    hid2 = held_alert(c, secret, size=12)  # a different order; the same one again would be a duplicate BLOCK
+    assert tap(c, f"r:{hid2}").json()["outcome"] == "BLOCK" and "Rejected" in sender.edits[-1]
+
+
+def test_telegram_taps_need_the_secret_and_the_traders_chat():
+    c, _ = tg_client()
+    hid = held_alert(c, setup_bot(c))
+    assert tap(c, f"c:{hid}", secret="wrong").status_code == 403
+    assert tap(c, f"c:{hid}", chat=999).json()["handled"] is False
+    assert hid in [h["hold_id"] for h in c.get("/holds", headers=ADMIN).json()]  # still waiting
+
+
+def test_telegram_disabled_without_secret():
+    c, _ = client()
+    assert c.post("/telegram/webhook", json={}, headers={"X-Telegram-Bot-Api-Secret-Token": ""}).status_code == 403
+
+
+def test_bots_summary_and_dashboard_page():
+    c, _ = client()
+    setup_bot(c)
+    assert c.get("/bots").status_code == 401
+    b = c.get("/bots", headers=ADMIN).json()
+    assert b["bots"][0]["bot_id"] == "trend" and b["dry_run"] is True
+    page = c.get("/dashboard")
+    assert page.status_code == 200 and "AlgoGuard" in page.text

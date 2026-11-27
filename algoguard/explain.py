@@ -21,6 +21,8 @@ _NUM = re.compile(r"-?\d[\d,]*\.?\d*")
 def template(d: Decision) -> str:
     s = d.signal
     order = f"{s.side} {s.size} {s.symbol}" + (f" at {s.price:g}" if s.order_type == "limit" and s.price else "")
+    if s.raw.get("original_size") and s.raw["original_size"] != s.size:
+        order += f" (halved from {s.raw['original_size']} by your drift rule)"
     main = [f for f in d.findings if f.severity == ("block" if d.outcome is Outcome.BLOCK else "hold")]
     if d.outcome is Outcome.PASS:
         binding = next((f for f in d.findings if f.code == "binding_limit"), None)

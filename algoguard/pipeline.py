@@ -123,6 +123,23 @@ class Guard:
         self.log.append(d)
         return d
 
+    def expire_holds(self, now: float | None = None) -> list[Decision]:
+        """Drop HOLDs nobody answered in time and log each one: an unanswered hold is never sent."""
+        now = now or time.time()
+        out = []
+        for hid, h in list(self.held.items()):
+            if now - h.created > self.confirm.seconds:
+                del self.held[hid]
+                d = Decision(Outcome.BLOCK, h.decision.signal,
+                             [Finding("hold_expired", "system", "block",
+                                      f"Not confirmed within {self.confirm.seconds} s, so it was never sent.", {})],
+                             h.decision.anomaly_score)
+                d.explanation = self.explainer.explain(d)
+                d.hold_id = hid
+                self.log.append(d)
+                out.append(d)
+        return out
+
     def maintain(self, bot_id: str) -> None:
         """Slow upkeep (model refits). The API runs it after the response is sent, off the order path."""
         try:

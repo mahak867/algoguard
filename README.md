@@ -67,6 +67,18 @@ uvicorn algoguard.api:app --reload
 
 `ALGOGUARD_DRY_RUN=true` (the default) decides and logs but never sends an order.
 
+### Dashboard and one-tap Telegram
+
+- **Dashboard:** open `/dashboard` and enter the admin token. It shows orders waiting for you (with Confirm and
+  Reject), each bot's drift score over time and today's loss against its limit, and every decision with its reason.
+  Try it with no setup: `python scripts/dashboard_demo.py`, then open http://localhost:8000/dashboard (token: `demo`).
+- **Telegram buttons:** every HOLD arrives with ✅ Confirm and ❌ Reject. Set `ALGOGUARD_TELEGRAM_BOT_TOKEN`,
+  `ALGOGUARD_TELEGRAM_CHAT_ID` and `ALGOGUARD_TELEGRAM_WEBHOOK_SECRET`, then either
+  `python scripts/telegram.py set-webhook https://your-server` (server with HTTPS) or
+  `python scripts/telegram.py poll http://localhost:8000` (local). A tap counts only if Telegram's secret header
+  matches and it comes from your chat; the confirmation token never leaves the server, a hold can be answered once,
+  and an unanswered hold expires and is logged as never sent.
+
 ### Register a bot and point your Delta Trading Bot alert at it
 
 ```bash
