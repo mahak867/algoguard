@@ -7,6 +7,8 @@ Challenge.
 AI models check every order and keep watching a bot after it goes live; the trader's own hard limits always
 have the final say.
 
+**Round 1 deck:** [AlgoGuard_Round1_Deck.pdf](AlgoGuard_Round1_Deck.pdf)
+
 ![AlgoGuard demo: a week with a BTC futures bot](docs/demo.gif)
 
 *The week from our Round 1 deck, run through the real code (`python scripts/demo_week.py`; simulated prices and
