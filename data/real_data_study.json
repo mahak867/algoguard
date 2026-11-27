@@ -1,0 +1,719 @@
+{
+ "data": {
+  "BTCUSD": "2024-01-10",
+  "ETHUSD": "2024-02-06",
+  "SOLUSD": "2024-04-08"
+ },
+ "tuned_on_development_period": {
+  "k": 0.5,
+  "h": 3.0,
+  "range_act_pct": 0.01,
+  "range_warn_pct": 0.03,
+  "false_act_rate_no_change": 0.1,
+  "false_act_rate_held_out_no_change": 0.09
+ },
+ "held_out_default": {
+  "symbol_quarters": 15,
+  "losing_quarters": 12,
+  "acted_in": 1,
+  "acted_in_losing": 1,
+  "losing_caught": "1/12",
+  "median_trades_to_act": 101.0,
+  "avg_quarter_return_without": -32.9,
+  "avg_quarter_return_with": -32.8,
+  "avg_quarter_max_drawdown_without": 58.6,
+  "avg_quarter_max_drawdown_with": 58.5,
+  "worst_quarter_without": -95.8,
+  "worst_quarter_with": -95.0,
+  "rows": [
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-07-09",
+    "ema": "8/21",
+    "trades": 107,
+    "acted_after": null,
+    "plain": [
+     0.745991369819432,
+     45.838622319758315
+    ],
+    "guarded": [
+     0.745991369819432,
+     45.838622319758315
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-10-08",
+    "ema": "50/200",
+    "trades": 20,
+    "acted_after": null,
+    "plain": [
+     -65.84848302754807,
+     69.48744762629944
+    ],
+    "guarded": [
+     -65.84848302754807,
+     69.48744762629944
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-01-07",
+    "ema": "24/72",
+    "trades": 38,
+    "acted_after": null,
+    "plain": [
+     -54.935275978682476,
+     73.84690150851188
+    ],
+    "guarded": [
+     -54.935275978682476,
+     73.84690150851188
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-04-08",
+    "ema": "20/50",
+    "trades": 37,
+    "acted_after": null,
+    "plain": [
+     13.74251745934405,
+     22.448160312146303
+    ],
+    "guarded": [
+     13.74251745934405,
+     22.448160312146303
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-07-08",
+    "ema": "20/50",
+    "trades": 40,
+    "acted_after": null,
+    "plain": [
+     -4.335957788165324,
+     28.546045803232612
+    ],
+    "guarded": [
+     -4.335957788165324,
+     28.546045803232612
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-08-05",
+    "ema": "50/200",
+    "trades": 10,
+    "acted_after": null,
+    "plain": [
+     -3.063639861588252,
+     49.43561889384214
+    ],
+    "guarded": [
+     -3.063639861588252,
+     49.43561889384214
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-11-04",
+    "ema": "12/26",
+    "trades": 69,
+    "acted_after": null,
+    "plain": [
+     -45.649805341647074,
+     78.97687963798103
+    ],
+    "guarded": [
+     -45.649805341647074,
+     78.97687963798103
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-02-03",
+    "ema": "12/26",
+    "trades": 72,
+    "acted_after": null,
+    "plain": [
+     -67.36077288370961,
+     74.9198693446754
+    ],
+    "guarded": [
+     -67.36077288370961,
+     74.9198693446754
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-05-05",
+    "ema": "50/200",
+    "trades": 11,
+    "acted_after": null,
+    "plain": [
+     -12.570066182865535,
+     33.147372654080975
+    ],
+    "guarded": [
+     -12.570066182865535,
+     33.147372654080975
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-08-04",
+    "ema": "8/21",
+    "trades": 131,
+    "acted_after": null,
+    "plain": [
+     -61.12178982859879,
+     69.84800164188178
+    ],
+    "guarded": [
+     -61.12178982859879,
+     69.84800164188178
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-07-07",
+    "ema": "20/50",
+    "trades": 38,
+    "acted_after": null,
+    "plain": [
+     -11.264762532627781,
+     66.95240092939669
+    ],
+    "guarded": [
+     -11.264762532627781,
+     66.95240092939669
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-10-06",
+    "ema": "8/21",
+    "trades": 118,
+    "acted_after": 101,
+    "plain": [
+     -95.75070780079137,
+     96.90589917718577
+    ],
+    "guarded": [
+     -95.00885659207731,
+     96.36572393677389
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-01-05",
+    "ema": "50/200",
+    "trades": 13,
+    "acted_after": null,
+    "plain": [
+     -75.15477414539829,
+     87.46948742236604
+    ],
+    "guarded": [
+     -75.15477414539829,
+     87.46948742236604
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-04-06",
+    "ema": "50/200",
+    "trades": 11,
+    "acted_after": null,
+    "plain": [
+     -12.237549385772828,
+     39.78694323223806
+    ],
+    "guarded": [
+     -12.237549385772828,
+     39.78694323223806
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-07-06",
+    "ema": "8/21",
+    "trades": 104,
+    "acted_after": null,
+    "plain": [
+     1.8511591955609363,
+     41.11371403416317
+    ],
+    "guarded": [
+     1.8511591955609363,
+     41.11371403416317
+    ],
+    "losing": false
+   }
+  ]
+ },
+ "held_out_tuned": {
+  "symbol_quarters": 15,
+  "losing_quarters": 12,
+  "acted_in": 5,
+  "acted_in_losing": 5,
+  "losing_caught": "5/12",
+  "median_trades_to_act": 22.0,
+  "avg_quarter_return_without": -32.9,
+  "avg_quarter_return_with": -32.6,
+  "avg_quarter_max_drawdown_without": 58.6,
+  "avg_quarter_max_drawdown_with": 58.1,
+  "worst_quarter_without": -95.8,
+  "worst_quarter_with": -92.9,
+  "rows": [
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-07-09",
+    "ema": "8/21",
+    "trades": 107,
+    "acted_after": null,
+    "plain": [
+     0.745991369819432,
+     45.838622319758315
+    ],
+    "guarded": [
+     0.745991369819432,
+     45.838622319758315
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-10-08",
+    "ema": "50/200",
+    "trades": 20,
+    "acted_after": 16,
+    "plain": [
+     -65.84848302754807,
+     69.48744762629944
+    ],
+    "guarded": [
+     -62.67139808170956,
+     66.64889228822209
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-01-07",
+    "ema": "24/72",
+    "trades": 38,
+    "acted_after": null,
+    "plain": [
+     -54.935275978682476,
+     73.84690150851188
+    ],
+    "guarded": [
+     -54.935275978682476,
+     73.84690150851188
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-04-08",
+    "ema": "20/50",
+    "trades": 37,
+    "acted_after": null,
+    "plain": [
+     13.74251745934405,
+     22.448160312146303
+    ],
+    "guarded": [
+     13.74251745934405,
+     22.448160312146303
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2026-07-08",
+    "ema": "20/50",
+    "trades": 40,
+    "acted_after": null,
+    "plain": [
+     -4.335957788165324,
+     28.546045803232612
+    ],
+    "guarded": [
+     -4.335957788165324,
+     28.546045803232612
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-08-05",
+    "ema": "50/200",
+    "trades": 10,
+    "acted_after": null,
+    "plain": [
+     -3.063639861588252,
+     49.43561889384214
+    ],
+    "guarded": [
+     -3.063639861588252,
+     49.43561889384214
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-11-04",
+    "ema": "12/26",
+    "trades": 69,
+    "acted_after": 22,
+    "plain": [
+     -45.649805341647074,
+     78.97687963798103
+    ],
+    "guarded": [
+     -48.62761585614972,
+     76.91269276008424
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-02-03",
+    "ema": "12/26",
+    "trades": 72,
+    "acted_after": 26,
+    "plain": [
+     -67.36077288370961,
+     74.9198693446754
+    ],
+    "guarded": [
+     -69.60171880342078,
+     76.64182238779208
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-05-05",
+    "ema": "50/200",
+    "trades": 11,
+    "acted_after": null,
+    "plain": [
+     -12.570066182865535,
+     33.147372654080975
+    ],
+    "guarded": [
+     -12.570066182865535,
+     33.147372654080975
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2026-08-04",
+    "ema": "8/21",
+    "trades": 131,
+    "acted_after": null,
+    "plain": [
+     -61.12178982859879,
+     69.84800164188178
+    ],
+    "guarded": [
+     -61.12178982859879,
+     69.84800164188178
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-07-07",
+    "ema": "20/50",
+    "trades": 38,
+    "acted_after": null,
+    "plain": [
+     -11.264762532627781,
+     66.95240092939669
+    ],
+    "guarded": [
+     -11.264762532627781,
+     66.95240092939669
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-10-06",
+    "ema": "8/21",
+    "trades": 118,
+    "acted_after": 63,
+    "plain": [
+     -95.75070780079137,
+     96.90589917718577
+    ],
+    "guarded": [
+     -92.9161362466926,
+     94.84192010333057
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-01-05",
+    "ema": "50/200",
+    "trades": 13,
+    "acted_after": 8,
+    "plain": [
+     -75.15477414539829,
+     87.46948742236604
+    ],
+    "guarded": [
+     -72.08874401754623,
+     85.9231569802405
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-04-06",
+    "ema": "50/200",
+    "trades": 11,
+    "acted_after": null,
+    "plain": [
+     -12.237549385772828,
+     39.78694323223806
+    ],
+    "guarded": [
+     -12.237549385772828,
+     39.78694323223806
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2026-07-06",
+    "ema": "8/21",
+    "trades": 104,
+    "acted_after": null,
+    "plain": [
+     1.8511591955609363,
+     41.11371403416317
+    ],
+    "guarded": [
+     1.8511591955609363,
+     41.11371403416317
+    ],
+    "losing": false
+   }
+  ]
+ },
+ "development_tuned": {
+  "symbol_quarters": 11,
+  "losing_quarters": 9,
+  "acted_in": 6,
+  "acted_in_losing": 6,
+  "losing_caught": "6/9",
+  "median_trades_to_act": 12.0,
+  "avg_quarter_return_without": -29.6,
+  "avg_quarter_return_with": -29.5,
+  "avg_quarter_max_drawdown_without": 65.7,
+  "avg_quarter_max_drawdown_with": 64.7,
+  "worst_quarter_without": -87.0,
+  "worst_quarter_with": -87.0,
+  "rows": [
+   {
+    "symbol": "BTCUSD",
+    "from": "2024-07-10",
+    "ema": "50/100",
+    "trades": 18,
+    "acted_after": 10,
+    "plain": [
+     -16.409219909939477,
+     49.158355193476986
+    ],
+    "guarded": [
+     -17.43792875815483,
+     44.29944875427276
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2024-10-09",
+    "ema": "24/72",
+    "trades": 22,
+    "acted_after": null,
+    "plain": [
+     122.63095124571058,
+     26.022479872371996
+    ],
+    "guarded": [
+     122.63095124571058,
+     26.022479872371996
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-01-08",
+    "ema": "24/72",
+    "trades": 34,
+    "acted_after": 14,
+    "plain": [
+     -64.16646354178268,
+     71.22926853116726
+    ],
+    "guarded": [
+     -60.110956491751075,
+     67.51638885810283
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "BTCUSD",
+    "from": "2025-04-09",
+    "ema": "24/72",
+    "trades": 35,
+    "acted_after": null,
+    "plain": [
+     -39.66690540311514,
+     40.25878395303387
+    ],
+    "guarded": [
+     -39.66690540311514,
+     40.25878395303387
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2024-08-06",
+    "ema": "24/72",
+    "trades": 30,
+    "acted_after": 10,
+    "plain": [
+     -44.61973375557635,
+     65.3234210747516
+    ],
+    "guarded": [
+     -49.800850391285366,
+     65.3234210747516
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2024-11-05",
+    "ema": "20/50",
+    "trades": 50,
+    "acted_after": 41,
+    "plain": [
+     -68.26314940358515,
+     79.24969840083536
+    ],
+    "guarded": [
+     -66.76802121357296,
+     77.33282656865697
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-02-04",
+    "ema": "12/26",
+    "trades": 88,
+    "acted_after": 5,
+    "plain": [
+     -86.98193485417414,
+     87.52959606611692
+    ],
+    "guarded": [
+     -86.9757333373325,
+     87.52365544290205
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "ETHUSD",
+    "from": "2025-05-06",
+    "ema": "50/200",
+    "trades": 13,
+    "acted_after": null,
+    "plain": [
+     29.2269210241783,
+     70.12910690763594
+    ],
+    "guarded": [
+     29.2269210241783,
+     70.12910690763594
+    ],
+    "losing": false
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2024-10-07",
+    "ema": "20/50",
+    "trades": 40,
+    "acted_after": null,
+    "plain": [
+     -20.285218838232687,
+     76.0478901832572
+    ],
+    "guarded": [
+     -20.285218838232687,
+     76.0478901832572
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-01-06",
+    "ema": "20/50",
+    "trades": 45,
+    "acted_after": 43,
+    "plain": [
+     -61.3787016400486,
+     82.16088383975631
+    ],
+    "guarded": [
+     -59.32287198756987,
+     81.21129939972953
+    ],
+    "losing": true
+   },
+   {
+    "symbol": "SOLUSD",
+    "from": "2025-04-07",
+    "ema": "30/90",
+    "trades": 33,
+    "acted_after": null,
+    "plain": [
+     -75.74857301211703,
+     75.74857301211703
+    ],
+    "guarded": [
+     -75.74857301211703,
+     75.74857301211703
+    ],
+    "losing": true
+   }
+  ]
+ }
+}

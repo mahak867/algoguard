@@ -90,7 +90,19 @@ curl -X POST localhost:8000/bots/btc-trend/backtest -H "Authorization: Bearer $A
   -H "Content-Type: application/json" -d '{"returns": [0.8, -0.4, 1.2, ...], "market_vol": 2.1}'
 ```
 
-## Measured so far (simulated data only)
+## Measured on real data
+
+Details and caveats: [`docs/real_data_study.md`](docs/real_data_study.md).
+
+- **Delta's own forum:** 15 of 49 user questions in the *APIs & Algo Trading* category (about 1 in 3) are about an
+  order that did not go through as intended or a bot that could not read its own orders or positions
+  ([classified list](docs/evidence/delta_forum_audit.csv)).
+- **Drift on real Delta prices** (`python scripts/real_data_study.py`, BTC, ETH and SOL hourly candles, walk-forward,
+  settings tuned before July 2025 and tested after): with `DriftConfig.delta_calibrated()`, drift acted in 5
+  held-out bot-quarters, **all 5 of them losing quarters**, catching 5 of 12 losing quarters after a median of 22
+  trades. Cutting size after the alarm saved little money in this test; the value is the early, reliable warning.
+
+## Measured on simulated data
 
 `scripts/replay_demo.py` replays a simulated long-only BTC bot (80 alerts to learn, then 96 normal alerts with
 96 injected faults: duplicates, 10x size, stale alerts, prices far from mark, shorts the bot never takes, 25x

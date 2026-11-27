@@ -38,6 +38,15 @@ class DriftConfig:
     bootstrap_sims: int = 2000
     block: int = 5
     vol_ratio_regime: float = 1.5   # market vol this many times the baseline (or 1/x) counts as a regime shift
+    range_warn_pct: float = 0.005   # live total in the backtest's bottom 0.5% over as many trades: warn
+    range_act_pct: float = 0.001    # bottom 0.1%: act
+
+    @classmethod
+    def delta_calibrated(cls, **kw) -> "DriftConfig":
+        """Settings tuned on real Delta India BTC/ETH/SOL hourly prices (trend bots, Jan 2024 - Jun 2025) and checked on
+        held-out data from Jul 2025: see docs/real_data_study.md. More sensitive than the defaults (catches more
+        decaying bots, sooner) at the cost of more false alarms when nothing changed (about 9-10% vs about 3%)."""
+        return cls(**{"k": 0.5, "h": 3.0, "range_act_pct": 0.01, "range_warn_pct": 0.03, **kw})
 
 
 @dataclass
@@ -121,7 +130,8 @@ class DriftDetector:
             "slippage": self._cusum_score(s.s_slip),
             # Checked after every trade, so only extreme results count, and only from 10 trades on: the live total
             # in the bottom 0.5% of what the backtest produces over as many trades warns, bottom 0.1% acts.
-            "vs_backtest_range": float(np.interp(pct, [0.0, 0.001, 0.005, 0.05], [100, 80, 60, 0]))
+            "vs_backtest_range": float(np.interp(pct, [0.0, c.range_act_pct, c.range_warn_pct, max(0.05, 2 * c.range_warn_pct)],
+                                                 [100, c.act_at, c.warn_at, 0]))
             if n >= 10 else 0.0,
         }
         score = int(round(max(signals.values())))

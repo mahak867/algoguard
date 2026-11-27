@@ -54,3 +54,19 @@ def test_parse_tradingview_csv():
     assert parse_tradingview_csv(text) == [2.0, -1.0]
     with pytest.raises(ValueError):
         parse_tradingview_csv("a,b\n1,2\n")
+
+
+def test_delta_calibrated_preset_is_more_sensitive():
+    import numpy as np
+    from algoguard.drift import Baseline, DriftConfig, DriftDetector, LiveTrade
+    base = Baseline.from_returns(np.random.default_rng(1).normal(0.5, 6.0, 120))
+    live = np.random.default_rng(2).normal(-2.5, 6.0, 25)  # a decayed bot: worse, but within 0.75 sd per trade
+
+    def first_act(cfg):
+        d = DriftDetector(base, cfg)
+        return next((i + 1 for i, r in enumerate(live) if d.update(LiveTrade(float(r)))["level"] == "act"), None)
+
+    tuned = first_act(DriftConfig.delta_calibrated())
+    default = first_act(DriftConfig())
+    assert tuned is not None and (default is None or tuned < default)
+    assert DriftConfig.delta_calibrated(action="pause").action == "pause"

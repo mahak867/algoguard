@@ -1,0 +1,70 @@
+topic_id,created,title,url,class,note
+12,2024-06-20,About the APIs & Algo Trading category,https://community.delta.exchange/t/12,excluded,"announcement, tutorial or promotion, not a user question"
+118,2024-10-22,Delta Exchange India on TradingView,https://community.delta.exchange/t/118,excluded,"announcement, tutorial or promotion, not a user question"
+592,2024-11-30,Getting 403: Forbidden from APIs,https://community.delta.exchange/t/592,other_question,"data, auth setup, how-to or account question"
+650,2024-12-24,To Get Available balance in wallet?,https://community.delta.exchange/t/650,other_question,"data, auth setup, how-to or account question"
+670,2025-01-03,Error while fetching positions,https://community.delta.exchange/t/670,order_or_position_state,Cannot fetch positions
+673,2025-01-04,How to Place a Stop Market Order with Stop Loss and Target Using API,https://community.delta.exchange/t/673,other_question,"data, auth setup, how-to or account question"
+689,2025-01-07,IP Not Whitelisted Error in Delta Exchange API Even After Adding IP,https://community.delta.exchange/t/689,other_question,"data, auth setup, how-to or account question"
+716,2025-01-12,About editing bracket order,https://community.delta.exchange/t/716,order_or_position_state,Editing a bracket order fails
+714,2025-01-12,Not Getting Active orders,https://community.delta.exchange/t/714,order_or_position_state,Cannot read active orders
+738,2025-01-19,Unable to fetch historical data,https://community.delta.exchange/t/738,other_question,"data, auth setup, how-to or account question"
+747,2025-01-24,How to get All the tickers (Futures only) along with LTP and OHLC,https://community.delta.exchange/t/747,other_question,"data, auth setup, how-to or account question"
+764,2025-01-29,Candle data and mark price not matching with he candles seen on trading terminal,https://community.delta.exchange/t/764,other_question,"data, auth setup, how-to or account question"
+767,2025-01-30,Getting wrong Historical data using API,https://community.delta.exchange/t/767,other_question,"data, auth setup, how-to or account question"
+803,2025-02-16,API to code any setup,https://community.delta.exchange/t/803,other_question,"data, auth setup, how-to or account question"
+810,2025-02-18,Wrong price while fetching OHLC using api,https://community.delta.exchange/t/810,other_question,"data, auth setup, how-to or account question"
+821,2025-02-22,How to Place Bracket Orders via API,https://community.delta.exchange/t/821,other_question,"data, auth setup, how-to or account question"
+819,2025-02-22,How to fetch LTP of options price,https://community.delta.exchange/t/819,other_question,"data, auth setup, how-to or account question"
+831,2025-02-24,"Order Placed Successfully: {'error': {'code': 'Signature Mismatch', 'context': {'signature_data': 'POST1740429645/v2/orders{""product_id"": 27, ""size"": 1, ""order_type"": ""market_order"", ""side"": ""buy""}'}}, 'success': False}",https://community.delta.exchange/t/831,order_not_executed,Strategy logged 'Order Placed Successfully' but Delta returned an error; no order was placed
+844,2025-03-02,"Not Getting active, orders place in delta indian prod server",https://community.delta.exchange/t/844,order_or_position_state,"Trade visible on Delta, but the API returns no orders"
+857,2025-03-05,Algo trading functions,https://community.delta.exchange/t/857,other_question,"data, auth setup, how-to or account question"
+868,2025-03-05,Create Order Fail,https://community.delta.exchange/t/868,order_not_executed,Order placement fails from the Python client
+890,2025-03-08,Get Order by client oid,https://community.delta.exchange/t/890,order_or_position_state,Get order by client id does not behave as documented
+897,2025-03-11,How to delete position orders :,https://community.delta.exchange/t/897,other_question,"data, auth setup, how-to or account question"
+908,2025-03-14,Any api to fetch the expiry dates?,https://community.delta.exchange/t/908,other_question,"data, auth setup, how-to or account question"
+927,2025-03-19,Error fetching position data through API,https://community.delta.exchange/t/927,order_or_position_state,Fetching positions fails intermittently
+1093,2025-04-20,Unable to change the leverage using Node JS SDK,https://community.delta.exchange/t/1093,order_or_position_state,Cannot change leverage from the SDK
+1252,2025-05-15,"Need to understand , how to get active positions, documentation isn't clear enough",https://community.delta.exchange/t/1252,order_or_position_state,"Unclear what the positions response means (size 0, true/false)"
+1425,2025-06-11,Stop price and limit price,https://community.delta.exchange/t/1425,other_question,"data, auth setup, how-to or account question"
+1585,2025-07-09,TRADING VIEW option chain,https://community.delta.exchange/t/1585,other_question,"data, auth setup, how-to or account question"
+1726,2025-07-23,Limit order via ALGO - trading view webhook,https://community.delta.exchange/t/1726,other_question,"data, auth setup, how-to or account question"
+1863,2025-08-02,Tradingview send alert but not excute trade on delta exchange inida problem,https://community.delta.exchange/t/1863,order_not_executed,Alert sent; trade not executed on Delta
+1901,2025-08-05,Tradingview show me alert but delta exchange not excute order and failed message,https://community.delta.exchange/t/1901,order_not_executed,Alert shown; order failed (decimal quantity)
+1959,2025-08-10,CCXT library and authentication,https://community.delta.exchange/t/1959,other_question,"data, auth setup, how-to or account question"
+2126,2025-09-06,Access issue while callling api,https://community.delta.exchange/t/2126,order_not_executed,Order request rejected (401)
+2152,2025-09-17,Trading bot of delta exchange not execute the trade while trading view give alert please guide what can i do to resolve it,https://community.delta.exchange/t/2152,order_not_executed,TradingView alert fired; the Trading Bot order did not execute
+2169,2025-10-04,A new Python SDK needs more robust and descriptive,https://community.delta.exchange/t/2169,other_question,"data, auth setup, how-to or account question"
+2174,2025-10-11,Webhook Integration,https://community.delta.exchange/t/2174,other_question,"data, auth setup, how-to or account question"
+2204,2025-11-17,How to fetch next funding rate for BTCUSD / ETHUSD futures via API?,https://community.delta.exchange/t/2204,other_question,"data, auth setup, how-to or account question"
+2235,2025-12-24,Troubleshooting with invalid api key error!,https://community.delta.exchange/t/2235,other_question,"data, auth setup, how-to or account question"
+2237,2025-12-26,Mismatch between OHLC data from API and Live charts ate web terminal,https://community.delta.exchange/t/2237,other_question,"data, auth setup, how-to or account question"
+2307,2026-03-17,Introducing Algo Quest by Delta Exchange,https://community.delta.exchange/t/2307,excluded,"announcement, tutorial or promotion, not a user question"
+2305,2026-03-17,Getting Order History and Sorting,https://community.delta.exchange/t/2305,other_question,"data, auth setup, how-to or account question"
+2312,2026-04-01,Tradingbor and api,https://community.delta.exchange/t/2312,other_question,"data, auth setup, how-to or account question"
+2326,2026-04-12,Build Your Own Automated Options Trading Tool (No Coding Required),https://community.delta.exchange/t/2326,excluded,"announcement, tutorial or promotion, not a user question"
+2327,2026-04-12,Algo trading via Tradetron Software,https://community.delta.exchange/t/2327,other_question,"data, auth setup, how-to or account question"
+2337,2026-04-17,Having trouble creating your first Webhook or API?,https://community.delta.exchange/t/2337,excluded,"announcement, tutorial or promotion, not a user question"
+2343,2026-04-25,Create Custom Algo strategy,https://community.delta.exchange/t/2343,other_question,"data, auth setup, how-to or account question"
+2351,2026-05-06,Build & Backtest Trading Strategies Live — Free Webinar This Friday,https://community.delta.exchange/t/2351,excluded,"announcement, tutorial or promotion, not a user question"
+2352,2026-05-07,Backtesting in Tradetron,https://community.delta.exchange/t/2352,other_question,"data, auth setup, how-to or account question"
+2356,2026-05-10,Algo Test is free for Delta Exchange user,https://community.delta.exchange/t/2356,other_question,"data, auth setup, how-to or account question"
+2359,2026-05-14,Build Your Own Fully Automated Bitcoin Trading System on TradingView (No Coding Required),https://community.delta.exchange/t/2359,excluded,"announcement, tutorial or promotion, not a user question"
+2380,2026-06-17,Build a Live Crypto Screener Using Delta API Copilot,https://community.delta.exchange/t/2380,excluded,"announcement, tutorial or promotion, not a user question"
+2395,2026-07-14,Build Your Own AI-Powered Options Analytics & Execution Portal -No Coding Required,https://community.delta.exchange/t/2395,excluded,"announcement, tutorial or promotion, not a user question"
+2398,2026-07-20,Introducing Algo Marketplace—Automated strategies that trade for you,https://community.delta.exchange/t/2398,excluded,"announcement, tutorial or promotion, not a user question"
+2405,2026-07-24,"Query Regarding Maximum ETH Lot Size Limits for 100x, 150x, and 200x Leverage",https://community.delta.exchange/t/2405,other_question,"data, auth setup, how-to or account question"
+2458,2026-08-07,Become an AI-Powered Algo Trader,https://community.delta.exchange/t/2458,excluded,"announcement, tutorial or promotion, not a user question"
+2420,2026-08-18,Build Your Own AI Options Contract Selector- No Coding Required,https://community.delta.exchange/t/2420,excluded,"announcement, tutorial or promotion, not a user question"
+2429,2026-08-27,"Unable to update the stop loss of bracket order & getting error message like ""open_order_not_found""",https://community.delta.exchange/t/2429,order_or_position_state,Cannot change a live bracket order's stop loss
+2440,2026-09-04,Delta Exchange Options Strategy TV Template (Auto-Pilot),https://community.delta.exchange/t/2440,excluded,"announcement, tutorial or promotion, not a user question"
+2448,2026-09-13,History API response with Time in different format,https://community.delta.exchange/t/2448,other_question,"data, auth setup, how-to or account question"
+2467,2026-09-17,Analyse Delta Exchange Markets by Just Asking AI— Claude Desktop + MCP,https://community.delta.exchange/t/2467,excluded,"announcement, tutorial or promotion, not a user question"
+2473,2026-09-22,Build a Trading Bot on Delta Exchange — Without Writing Code,https://community.delta.exchange/t/2473,excluded,"announcement, tutorial or promotion, not a user question"
+2493,2026-10-03,"Plug in your indicator in Trading view and Control your TP, SL & Trailing SL - Free Futures Template",https://community.delta.exchange/t/2493,excluded,"announcement, tutorial or promotion, not a user question"
+2498,2026-10-05,Deposit not showing in my delta exchange walet,https://community.delta.exchange/t/2498,other_question,"data, auth setup, how-to or account question"
+2527,2026-10-19,Delta information,https://community.delta.exchange/t/2527,other_question,"data, auth setup, how-to or account question"
+2525,2026-10-19,WebSocket Deprecations — 31 October 2026,https://community.delta.exchange/t/2525,excluded,"announcement, tutorial or promotion, not a user question"
+2570,2026-10-30,"Automate Your BTC & ETH Time Based Options Trades on Delta Exchange (No Code, Free)",https://community.delta.exchange/t/2570,excluded,"announcement, tutorial or promotion, not a user question"
+2609,2026-11-06,Turn Your Trade Into A Rule Webinar,https://community.delta.exchange/t/2609,excluded,"announcement, tutorial or promotion, not a user question"
+2664,2026-11-18,📊 BTC Dominance Season: Trade Altcoin Perps or Stick With BTC?,https://community.delta.exchange/t/2664,excluded,"announcement, tutorial or promotion, not a user question"
